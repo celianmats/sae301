@@ -1,0 +1,105 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Calendrier{% endblock %}
+
+{% block stylesheets %}
+        <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/calendar.css') }}" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+{% endblock %}
+
+{% block body %}
+<body>
+<header>
+        <nav>
+                <div class="navbar">
+                        <div class="logo"><a href="{{ path('app_default') }}"><img class="logo" src="{{ asset('images/logo.png') }}"></a></div>
+                        <ul class="links">
+                                <li class="li"> <a href="{{ path('app_default') }}">Accueil</a></li>
+                                <li class="li"><a href="{{ path('app_calendar') }}">Calendrier</a></li>
+                                <li class="li"> <a href="{{ path('app_travaux') }}">Travaux</a></li>
+                        </ul>
+                        <div>
+                                <a href="{{ path('login') }}" class="action_btn">Connexion</a>
+                                <a href="{{ path('register') }}" class="action_btn" id="btn-b">Inscription</a>
+                        </div>
+                        <div class="toggle_btn">
+                                <i class="fa-solid fa-bars"></i>
+                        </div>
+                </div>
+
+                <div class="dropdown_menu close">
+                        <li class="li"><a href="{{ path('app_default') }}">Accueil</a></li>
+                        <li class="li"><a href="{{ path('app_calendar') }}">Calendrier</a></li>
+                        <li class="li"><a href="{{ path('app_travaux') }}">Travaux</a></li>
+                        <li class="li"><a href="{{ path('login') }}" class="action_btn">Connexion</a></li>
+                        <li class="li"><a href="{{ path('register') }}" class="action_btn" id="btn-b">Inscription</a></li>
+                </div>
+
+        </nav>
+</header>
+<h1>Calendrier</h1>
+<h2>Organisez vos rendus</h2>
+<section class="calendar-main-body">
+
+<input type="text" id="search-input" placeholder="Rechercher un événement"></input>
+<div class="calendar-second-body">
+        <div class="calendar-container">
+        <header class="calendar-header">
+                <p class="calendar-current-date"></p>
+                <div class="calendar-navigation">
+                        <span id="calendar-prev" class="material-symbols-rounded">chevron_left</span>
+                        <span id="calendar-next" class="material-symbols-rounded">chevron_right</span>
+                </div>
+        </header>
+        <div class="calendar-body">
+                <ul class="calendar-weekdays">
+                        <li>Lun</li>
+                        <li>Mar</li>
+                        <li>Mer</li>
+                        <li>Jeu</li>
+                        <li>Ven</li>
+                        <li>Sam</li>
+                        <li>Dim</li>
+                </ul>
+                <ul class="calendar-dates"></ul>
+        </div>
+</div>
+
+<div class="evenement">
+        <div class="evenement-content">
+                <img src="{{ asset('images/plus.png') }}" alt="#" class="ajouter"/>
+                <h3>Ajoutez un évènement</h3>
+        </div>
+        <p class="evenement-texte"></p>
+</div>
+</div>
+</section>
+</body>
+{% endblock %}
+
+        {% block javascripts %}
+                <script>
+                        window.onload = function () {
+                                const toggleBtn = document.querySelector('.toggle_btn');
+                                const toggleBtnIcon = document.querySelector('.toggle_btn i');
+                                const dropDownMenu = document.querySelector('.dropdown_menu');
+
+                                toggleBtn.onclick = function () {
+                                        dropDownMenu.classList.toggle('open');
+                                        const isOpen = dropDownMenu.classList.contains('open');
+
+                                        toggleBtnIcon.classList = isOpen
+                                                ? 'fa-solid fa-xmark'
+                                                : 'fa-solid fa-bars';
+                                };
+                        };
+                </script>
+                <script src="{{ asset('assets/js/java.js') }}"></script>
+
+
+        {% endblock %}

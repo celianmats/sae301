@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block stylesheets %}
+    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+{% endblock %}
+
+{% block body %}
+    <header>
+        <nav>
+            <div class="navbar">
+                <div class="logo"><a href="{{ path('app_default') }}"><img class="logo" src="{{ asset('images/logo.png') }}"></a></div>
+                <ul class="links">
+                    <li class="li"> <a href="{{ path('app_default') }}">Accueil</a></li>
+                    <li class="li"><a href="{{ path('app_calendar') }}">Calendrier</a></li>
+                    <li class="li"> <a href="{{ path('app_travaux') }}">Travaux</a></li>
+                </ul>
+                <div>
+                    <a href="{{ path('login') }}" class="action_btn">Connexion</a>
+                    <a href="{{ path('register') }}" class="action_btn" id="btn-b">Inscription</a>
+                </div>
+                <div class="toggle_btn">
+                    <i class="fa-solid fa-bars"></i>
+                </div>
+            </div>
+
+            <div class="dropdown_menu close">
+                <li class="li"><a href="{{ path('app_default') }}">Accueil</a></li>
+                <li class="li"><a href="{{ path('app_calendar') }}">Calendrier</a></li>
+                <li class="li"><a href="{{ path('app_travaux') }}">Travaux</a></li>
+                <li class="li"><a href="{{ path('login') }}" class="action_btn">Connexion</a></li>
+                <li class="li"><a href="{{ path('register') }}" class="action_btn" id="btn-b">Inscription</a></li>
+            </div>
+
+        </nav>
+    </header>
+    <h1>Connexion</h1>
+
+    <form method="post">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="password">Mot de passe :</label>
+        <input type="password" id="password" name="password" required>
+
+        <button type="submit">Connexion</button>
+    </form>
+
+{% endblock %}
+{% block javascripts %}
+    <script>
+        window.onload = function () {
+            const toggleBtn = document.querySelector('.toggle_btn');
+            const toggleBtnIcon = document.querySelector('.toggle_btn i');
+            const dropDownMenu = document.querySelector('.dropdown_menu');
+
+            toggleBtn.onclick = function () {
+                dropDownMenu.classList.toggle('open');
+                const isOpen = dropDownMenu.classList.contains('open');
+
+                toggleBtnIcon.classList = isOpen
+                    ? 'fa-solid fa-xmark'
+                    : 'fa-solid fa-bars';
+            };
+        };
+    </script>
+
+
+{% endblock %}
+
+
+

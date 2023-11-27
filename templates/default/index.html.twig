@@ -1,0 +1,201 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Work'Help{% endblock %}
+
+{% block stylesheets %}
+    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+{% endblock %}
+
+{% block body %}
+    <body>
+    <header class="main-header">
+        <div class="overlay"></div>
+        <div class="img-head"></div>
+    <nav>
+        <div class="navbar" id="index-nav">
+            <div class="logo"><a href="{{ path('app_default') }}"><img class="logo" src="{{ asset('images/logo.png') }}"></a></div>
+            <ul class="links">
+                <li class="li"><a href="{{ path('app_default') }}">Accueil</a></li>
+                <li class="li"><a href="{{ path('app_calendar') }}">Calendrier</a></li>
+                <li class="li"><a href="{{ path('app_travaux') }}">Travaux</a></li>
+            </ul>
+            <div>
+                {% if is_granted('ROLE_USER') %}
+                    {% if app.user %}
+                        <p>Bonjour avec l'email de l'utilisateur: {{ app.user.email }}</p>
+                        <a href="{{ path('logout') }}">Déconnexion</a>
+                    {% endif %}
+                {% else %}
+                    {# L'utilisateur n'est pas connecté, afficher les boutons de connexion et d'inscription #}
+                    <a href="{{ path('login') }}" class="action_btn">Connexion</a>
+                    <a href="{{ path('register') }}" class="action_btn" id="btn-b">Inscription</a>
+                {% endif %}
+
+            </div>
+            <div class="toggle_btn">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+        </div>
+
+        <div class="dropdown_menu close">
+            <li class="li"><a href="{{ path('app_default') }}">Accueil</a></li>
+            <li class="li"><a href="{{ path('app_calendar') }}">Calendrier</a></li>
+            <li class="li"><a href="{{ path('app_travaux') }}">Travaux</a></li>
+            <li class="li"><a href="{{ path('login') }}" class="action_btn">Connexion</a></li>
+            <li class="li"><a href="{{ path('register') }}" class="action_btn" id="btn-b">Inscription</a></li>
+        </div>
+
+    </nav>
+        <section id="hero">
+            <h1>Bienvenue sur Work'Help</h1>
+            <p>La plateforme qui aide les étudiants à s'organiser dans leurs devoirs</p>
+        </section>
+    </header>
+    <main>
+        <section id="content">
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="Rechercher...">
+            <button onclick="performSearch()">Rechercher</button>
+            <div class="icon">
+                <a href="{{ path('app_calendar') }}">
+                    <img src="{{ asset('images/calendrier.png') }}" alt="calendrier">
+                </a>
+            </div>
+        </div>
+        <div id="bloc">
+            <div class="bloc-enfant">
+                <h3>Rendus urgents :</h3>
+                <div class="card-container" id="card-container">
+
+
+                    <script>
+                        (function () {
+                            function generateRandomDate() {
+                                var year = 2023;
+                                var month = Math.floor(Math.random() * 12) + 1; // Entre 1 et 12
+                                var day = Math.floor(Math.random() * 28) + 1; // Entre 1 et 28 (pour simplifier)
+
+                                return `${day}/${month}/${year}`;
+                            }
+
+                            function generateCard(cardInfo) {
+                                const container = document.getElementById("card-container");
+
+                                const card = document.createElement("div");
+                                card.classList.add("card");
+                                card.setAttribute("data-name", cardInfo.name);
+
+                                const nameElement = document.createElement("h3");
+                                nameElement.textContent = cardInfo.name;
+
+                                const roleElement = document.createElement("p");
+                                roleElement.textContent = cardInfo.role;
+
+                                const renduDateElement = document.createElement("b");
+                                renduDateElement.classList.add("rendu-date");
+                                renduDateElement.textContent = "Rendu : " + generateRandomDate(); // Générer une date aléatoire
+
+                                // Create checkbox element
+                                const checkboxElement = document.createElement("input");
+                                checkboxElement.setAttribute("type", "checkbox");
+                                checkboxElement.classList.add("check-input");
+
+                                const imgElement = document.createElement("img");
+                                imgElement.setAttribute("src", "../images/check.png");
+                                imgElement.setAttribute("alt", "Check Image");
+
+                                const voirPlusButton = document.createElement("button");
+                                voirPlusButton.textContent = "Voir plus";
+                                voirPlusButton.classList.add("voir-plus-button");
+
+                                const rendreButton = document.createElement("button");
+                                rendreButton.textContent = "Rendre";
+                                rendreButton.classList.add("rendre-button");
+
+                                card.appendChild(nameElement);
+                                card.appendChild(roleElement);
+                                card.appendChild(renduDateElement);
+                                card.appendChild(checkboxElement);
+                                card.appendChild(imgElement);
+                                card.appendChild(voirPlusButton);
+                                card.appendChild(rendreButton);
+
+                                container.appendChild(card);
+
+                                // Add event listener to checkbox
+                                checkboxElement.addEventListener("change", function () {
+                                    if (checkboxElement.checked) {
+                                        // If checkbox is checked, update appearance and remove the card
+                                        checkboxElement.setAttribute("disabled", "true"); // Disable the checkbox
+                                        card.style.display = "none"; // Hide the card
+                                    }
+                                });
+                            }
+
+                            function generateCards() {
+                                const cardData = [
+                                    { name: "SAE301", role: "Développer des parcours utilisateur au sein d'un système d'information " },
+                                    { name: "WR304", role: "Travail dirigé sur un texte" },
+                                    // Ajoute autant de données que nécessaire
+                                ];
+
+                                cardData.forEach(generateCard);
+                            }
+
+                            function performSearch() {
+                                var searchTerm = document.getElementById("search-input").value.trim().toLowerCase();
+                                var cards = document.querySelectorAll('.card');
+
+                                cards.forEach(function (card) {
+                                    var cardName = card.getAttribute('data-name').toLowerCase();
+                                    card.style.display = searchTerm === "" || cardName.startsWith(searchTerm) ? 'block' : 'none';
+                                });
+                            }
+
+                            document.addEventListener("DOMContentLoaded", function () {
+                                generateCards();
+                                document.getElementById("search-input").addEventListener("input", performSearch);
+                            });
+                        })();
+
+
+
+
+                    </script>
+
+                </div>
+                <a href="{{ path('app_travaux') }}" id="more">Voir plus</a>
+            </div>
+            <div class="bloc-enfant">
+                <img src="{{ asset('images/calendar.png') }}" id="note">
+                <a href="{{ path('app_calendar') }}" id="k-link">Accéder au Calendrier</a>
+            </div>
+        </div>
+        </section>
+    </main>
+    </body>
+{% endblock %}
+{% block javascripts %}
+    <script>
+        window.onload = function () {
+            const toggleBtn = document.querySelector('.toggle_btn');
+            const toggleBtnIcon = document.querySelector('.toggle_btn i');
+            const dropDownMenu = document.querySelector('.dropdown_menu');
+
+            toggleBtn.onclick = function () {
+                dropDownMenu.classList.toggle('open');
+                const isOpen = dropDownMenu.classList.contains('open');
+
+                toggleBtnIcon.classList = isOpen
+                    ? 'fa-solid fa-xmark'
+                    : 'fa-solid fa-bars';
+            };
+        };
+    </script>
+
+
+{% endblock %}
