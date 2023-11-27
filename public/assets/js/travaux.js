@@ -3,10 +3,9 @@ document.addEventListener("DOMContentLoaded", function () {
   function generateCard(cardInfo) {
     const container = document.getElementById("card-container");
 
-    // Vérifier si une carte avec le même nom existe déjà
     const existingCard = document.querySelector(`.card[data-name="${cardInfo.name}"]`);
     if (existingCard) {
-      return; // Ne rien faire si la carte existe déjà
+      return;
     }
 
     const card = document.createElement("div");
@@ -66,61 +65,52 @@ document.addEventListener("DOMContentLoaded", function () {
 
     container.appendChild(card);
 
-    // Ajouter la carte au stockage local
     saveCardToLocalStorage(cardInfo);
 
-    // Ajouter les gestionnaires d'événements pour le bouton "Rendre" et la case à cocher
     checkboxElement.addEventListener("change", function () {
       if (checkboxElement.checked) {
-        // Si la case à cocher est cochée, supprimer la carte
+
         container.removeChild(card);
-        // Supprimer la carte du stockage local
+
         removeCardFromLocalStorage(cardInfo);
       }
     });
 
     rendreButton.addEventListener("click", function () {
-      // Supprimer la carte lorsque le bouton "Rendre" est cliqué
+
       container.removeChild(card);
-      // Supprimer la carte du stockage local
+
       removeCardFromLocalStorage(cardInfo);
     });
   }
 
   function saveCardToLocalStorage(cardInfo) {
-    // Récupérer les cartes existantes du stockage local
+
     const existingCards = JSON.parse(localStorage.getItem("cards")) || [];
 
-    // Vérifier si une carte avec le même nom existe déjà dans le stockage local
     const existingCardIndex = existingCards.findIndex(card => card.name === cardInfo.name);
 
     if (existingCardIndex === -1) {
-      // Ajouter la nouvelle carte aux cartes existantes
       existingCards.push(cardInfo);
 
-      // Sauvegarder les cartes mises à jour dans le stockage local
       localStorage.setItem("cards", JSON.stringify(existingCards));
     }
   }
 
   function removeCardFromLocalStorage(cardInfo) {
-    // Récupérer les cartes existantes du stockage local
+
     const existingCards = JSON.parse(localStorage.getItem("cards")) || [];
 
-    // Retirer la carte du stockage local en fonction du nom
     const updatedCards = existingCards.filter(card => card.name !== cardInfo.name);
 
-    // Sauvegarder les cartes mises à jour dans le stockage local
     localStorage.setItem("cards", JSON.stringify(updatedCards));
   }
 
   function loadCardsFromLocalStorage() {
     const container = document.getElementById("card-container");
 
-    // Récupérer les cartes du stockage local
     const existingCards = JSON.parse(localStorage.getItem("cards")) || [];
 
-    // Générer les cartes pour chaque élément stocké
     existingCards.forEach(cardInfo => {
       generateCard(cardInfo);
     });
