@@ -190,7 +190,7 @@ h2 {
   font-size: 1rem;
   font-weight: lighter;
 }
-button {
+.card a, button {
   background-color: #238183;
   color: #fff;
   padding: 0.7rem 1rem;
@@ -200,8 +200,14 @@ button {
   font-size: 0.8rem;
   font-weight: bold;
   cursor: pointer;
-  margin: 2em 0.3em 0 0.3em;
+  margin: 2em 0.3em 3em 0.3em;
   border: 0;
+}
+#add-card-btn {
+  padding: 1em 4em;
+}
+.card div {
+  margin: 2em 0;
 }
 .card.hidden {
   display: none;
@@ -278,19 +284,26 @@ form label {
   margin: 0.5em;
 }
 form input, form select {
-    margin-bottom: 1em;
-    padding: 0.5em;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-    width: 150px;
+  margin-bottom: 1em;
+  padding: 0.7em;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  width: 250px;
+}
 }
 form button {
   margin: 2em;
+}
+#new-card-form {
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+  margin: 2em auto;
+  width: 30%;
 }
 form {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin: 0 auto;
 }
 @media (min-width: 600px) {
   .card {
@@ -394,12 +407,18 @@ form {
   .calendar-main-body {
     margin: 3em !important;
   }
+  #new-card-form {
+    width: 80%;
 }
 @media(max-width: 576px) {
   .dropdown_menu {
   left: 2rem;
   width: unset;
 }
+  @media(max-width: 350px) {
+    #new-card-form {
+      width: 100%;
+    }
 }
 @media(max-width: 1390px) {
     .bloc-enfant .card-container .card {

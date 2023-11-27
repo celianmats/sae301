@@ -1,11 +1,4 @@
 document.addEventListener("DOMContentLoaded", function () {
-  function generateRandomDate() {
-    var year = 2023;
-    var month = Math.floor(Math.random() * 12) + 1;
-    var day = Math.floor(Math.random() * 28) + 1;
-
-    return `${day}/${month}/${year}`;
-  }
 
   function generateCard(cardInfo) {
     const container = document.getElementById("card-container");
@@ -29,7 +22,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const renduDateElement = document.createElement("b");
     renduDateElement.classList.add("rendu-date");
 
-    // Check if the date is provided and in the correct format
     if (cardInfo.date && /^\d{1,2}\/\d{1,2}\/\d{4}$/.test(cardInfo.date)) {
       renduDateElement.textContent = "Rendu : " + cardInfo.date;
     } else {
@@ -44,21 +36,33 @@ document.addEventListener("DOMContentLoaded", function () {
     imgElement.setAttribute("src", "../images/check.png");
     imgElement.setAttribute("alt", "Check Image");
 
-    const voirPlusButton = document.createElement("button");
-    voirPlusButton.textContent = "Voir plus";
-    voirPlusButton.classList.add("voir-plus-button");
+    const linksContainer = document.createElement("div");
 
-    const rendreButton = document.createElement("button");
-    rendreButton.textContent = "Rendre";
-    rendreButton.classList.add("rendre-button");
+    const voirPlusLink = document.createElement("a");
+    voirPlusLink.setAttribute("href", cardInfo.voirPlusLink || "#");
+    voirPlusLink.textContent = "Voir plus";
+    voirPlusLink.classList.add("voir-plus-button");
+    voirPlusLink.addEventListener("click", function () {
+      window.location.href = voirPlusLink.getAttribute("href");
+    });
+
+    const rendreLink = document.createElement("a");
+    rendreLink.setAttribute("href", cardInfo.rendreLink || "#");
+    rendreLink.textContent = "Rendre";
+    rendreLink.classList.add("rendre-button");
+    rendreLink.addEventListener("click", function () {
+      window.location.href = rendreLink.getAttribute("href");
+    });
+
+    linksContainer.appendChild(voirPlusLink);
+    linksContainer.appendChild(rendreLink);
 
     card.appendChild(nameElement);
     card.appendChild(roleElement);
     card.appendChild(renduDateElement);
     card.appendChild(checkboxElement);
     card.appendChild(imgElement);
-    card.appendChild(voirPlusButton);
-    card.appendChild(rendreButton);
+    card.appendChild(linksContainer);
 
     container.appendChild(card);
 
@@ -136,10 +140,14 @@ document.addEventListener("DOMContentLoaded", function () {
     const nameInput = document.getElementById("new-card-name");
     const roleInput = document.getElementById("new-card-role");
     const dateInput = document.getElementById("new-card-date");
+    const voirPlusLinkInput = document.getElementById("new-card-voirPlusLink"); // Ajout de cette ligne
+    const rendreLinkInput = document.getElementById("new-card-rendreLink");
 
     const newName = nameInput.value.trim();
     const newRole = roleInput.value.trim();
     let newDate = dateInput.value.trim();
+    const newVoirPlusLink = voirPlusLinkInput.value.trim();
+    const newRendreLink = rendreLinkInput.value.trim();
 
     const dateRegex = /^\d{2}\/\d{2}\/\d{4}$/;
     if (!dateRegex.test(newDate)) {
@@ -147,12 +155,14 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     if (newName && newRole) {
-      const newCardInfo = { name: newName, role: newRole, date: newDate };
+      const newCardInfo = { name: newName, role: newRole, date: newDate, voirPlusLink: newVoirPlusLink, rendreLink: newRendreLink, };
       generateCard(newCardInfo);
 
       nameInput.value = "";
       roleInput.value = "";
       dateInput.value = "";
+      voirPlusLinkInput.value = "";
+      rendreLinkInput.value = "";
     }
   }
 

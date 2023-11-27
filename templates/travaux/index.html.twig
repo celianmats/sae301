@@ -77,7 +77,12 @@
 
                 const renduDateElement = document.createElement("b");
                 renduDateElement.classList.add("rendu-date");
-                renduDateElement.textContent = "Rendu : " + generateRandomDate();
+
+                if (cardInfo.date && /^\d{1,2}\/\d{1,2}\/\d{4}$/.test(cardInfo.date)) {
+                    renduDateElement.textContent = "Rendu : " + cardInfo.date;
+                } else {
+                    renduDateElement.textContent = "Pas de date";
+                }
 
                 const checkboxElement = document.createElement("input");
                 checkboxElement.setAttribute("type", "checkbox");
@@ -87,26 +92,36 @@
                 imgElement.setAttribute("src", "{{ asset('images/check.png') }}");
                 imgElement.setAttribute("alt", "Check Image");
 
-                const voirPlusButton = document.createElement("button");
-                voirPlusButton.textContent = "Voir plus";
-                voirPlusButton.classList.add("voir-plus-button");
+                const linksContainer = document.createElement("div");
 
-                const rendreButton = document.createElement("button");
-                rendreButton.textContent = "Rendre";
-                rendreButton.classList.add("rendre-button");
+                const voirPlusLink = document.createElement("a");
+                voirPlusLink.setAttribute("href", cardInfo.voirPlusLink || "#");
+                voirPlusLink.textContent = "Voir plus";
+                voirPlusLink.classList.add("voir-plus-button");
+                voirPlusLink.addEventListener("click", function () {
+                    window.location.href = voirPlusLink.getAttribute("href");
+                });
+
+                const rendreLink = document.createElement("a");
+                rendreLink.setAttribute("href", cardInfo.rendreLink || "#");
+                rendreLink.textContent = "Rendre";
+                rendreLink.classList.add("rendre-button");
+                rendreLink.addEventListener("click", function () {
+                    window.location.href = rendreLink.getAttribute("href");
+                });
+
+                linksContainer.appendChild(voirPlusLink);
+                linksContainer.appendChild(rendreLink);
 
                 card.appendChild(nameElement);
                 card.appendChild(roleElement);
                 card.appendChild(renduDateElement);
                 card.appendChild(checkboxElement);
                 card.appendChild(imgElement);
-                card.appendChild(voirPlusButton);
-                card.appendChild(rendreButton);
+                card.appendChild(linksContainer);
 
                 container.appendChild(card);
 
-
-            // Add event listener to checkbox
                 checkboxElement.addEventListener("change", function () {
                     if (checkboxElement.checked) {
                         // If checkbox is checked, update appearance and remove the card
@@ -118,13 +133,48 @@
 
             function generateCards() {
                 const cardData = [
-                    { name: "SAE301", role: "Développer des parcours utilisateur au sein d'un système d'information " },
-                    { name: "WR304", role: "Travail dirigé sur un texte" },
-                    { name: "WR309", role: "Refonte du site web sortir dans l'aube" },
-                    { name: "WR308", role: "Représenter les invisibles" },
-                    { name: "WR311", role: "Réalisation d'un live twitch et son stream deck sur une page html" },
-                    { name: "WR317", role: "Réaliser une étude de la consommation numérique" },
-                    // Ajoute autant de données que nécessaire
+                    {
+                        name: "SAE301",
+                        role: "Développer des parcours utilisateur au sein d'un système d'information",
+                        voirPlusLink: "https://example.com/sae301-details",
+                        rendreLink: "https://example.com/sae301-submit",
+                        date: "03/12/2023"
+                    },
+                    {
+                        name: "WR304",
+                        role: "Travail dirigé sur un texte",
+                        voirPlusLink: "https://example.com/wr304-details",
+                        rendreLink: "https://example.com/wr304-submit",
+                        date: "15/12/2023"
+                    },
+                    {
+                        name: "WR308",
+                        role: "Représenter les invisibles",
+                        voirPlusLink: "https://example.com/wr308-details",
+                        rendreLink: "https://example.com/wr308-submit",
+                        date: "22/12/2023"
+                    },
+                    {
+                        name: "WR309",
+                        role: "Refonte du site web sortir dans l'aube",
+                        voirPlusLink: "https://example.com/wr309-details",
+                        rendreLink: "https://example.com/wr309-submit",
+                        date: "29/12/2023"
+                    },
+                    {
+                        name: "WR311",
+                        role: "Réalisation d'un live twitch et son stream deck sur une page html",
+                        voirPlusLink: "https://example.com/wr311-details",
+                        rendreLink: "https://example.com/wr311-submit",
+                        date: "30/12/2023"
+                    },
+                    {
+                        name: "WR317",
+                        role: "Réaliser une étude de la consommation numérique",
+                        voirPlusLink: "https://example.com/wr317-details",
+                        rendreLink: "https://example.com/wr317-submit",
+                        date: "30/12/2023"
+                    },
                 ];
 
                 cardData.forEach(generateCard);
@@ -155,14 +205,20 @@
     <form id="new-card-form">
 
         <h1>Ajouter un rendu</h1>
-        <label for="new-card-name">Ressource:</label>
+        <label for="new-card-name">Ressource :</label>
         <input type="text" id="new-card-name" required>
 
         <label for="new-card-role">Description :</label>
         <input type="text" id="new-card-role" required>
 
-        <label for="new-card-date">Date:</label>
+        <label for="new-card-date">Date :</label>
         <input type="text" id="new-card-date" placeholder="xx/xx/xxxx">
+
+        <label for="new-card-date">Lien vers des ressources :</label>
+        <input type="text" id="new-card-voirPlusLink" placeholder="https://lien-ressource-exemple.com">
+
+        <label for="new-card-date">Lien vers le rendu :</label>
+        <input type="text" id="new-card-rendreLink" placeholder="https://lien-rendu-exemple.com">
 
         <button type="button" id="add-card-btn">Ajouter</button>
     </form>
