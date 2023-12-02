@@ -1,4 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
+  const cardContainer = document.getElementById("card-container");
+  const historiqueContainer = document.getElementById("historique-container");
 
   function generateCard(cardInfo) {
     const container = document.getElementById("card-container");
@@ -30,6 +32,40 @@ document.addEventListener("DOMContentLoaded", function () {
     const checkboxElement = document.createElement("input");
     checkboxElement.setAttribute("type", "checkbox");
     checkboxElement.classList.add("check-input");
+
+    checkboxElement.addEventListener("change", function () {
+      if (checkboxElement.checked) {
+        checkboxElement.setAttribute("disabled", "true");
+        card.style.display = "block";
+        historiqueContainer.appendChild(card);
+
+        const remettreButton = document.createElement("button");
+        remettreButton.textContent = "Remettre";
+        remettreButton.addEventListener("click", function () {
+          checkboxElement.removeAttribute("disabled");
+          card.style.display = "block";
+          cardContainer.appendChild(card);
+
+          remettreButton.remove();
+          effacerButton.remove();
+        });
+
+        const effacerButton = document.createElement("button");
+        effacerButton.textContent = "Effacer";
+        effacerButton.addEventListener("click", function () {
+          const isConfirmed = window.confirm("Voulez-vous vraiment supprimer cette carte ?");
+          if (isConfirmed) {
+            card.remove();
+            removeCardFromLocalStorage(cardInfo);
+            remettreButton.remove();
+            effacerButton.remove();
+          }
+        });
+
+        card.appendChild(remettreButton);
+        card.appendChild(effacerButton);
+      }
+    });
 
     const imgElement = document.createElement("img");
     imgElement.setAttribute("src", "../images/check.png");
@@ -69,50 +105,57 @@ document.addEventListener("DOMContentLoaded", function () {
 
     checkboxElement.addEventListener("change", function () {
       if (checkboxElement.checked) {
-
         container.removeChild(card);
+        historiqueContainer.appendChild(card);
 
-        removeCardFromLocalStorage(cardInfo);
+        moveCardToHistorique(cardInfo);
       }
     });
 
-    rendreButton.addEventListener("click", function () {
-
+    rendreLink.addEventListener("click", function () {
       container.removeChild(card);
+      historiqueContainer.appendChild(card);
 
-      removeCardFromLocalStorage(cardInfo);
+      moveCardToHistorique(cardInfo);
     });
   }
 
   function saveCardToLocalStorage(cardInfo) {
-
     const existingCards = JSON.parse(localStorage.getItem("cards")) || [];
-
     const existingCardIndex = existingCards.findIndex(card => card.name === cardInfo.name);
 
     if (existingCardIndex === -1) {
       existingCards.push(cardInfo);
-
       localStorage.setItem("cards", JSON.stringify(existingCards));
     }
   }
 
   function removeCardFromLocalStorage(cardInfo) {
-
     const existingCards = JSON.parse(localStorage.getItem("cards")) || [];
-
     const updatedCards = existingCards.filter(card => card.name !== cardInfo.name);
-
     localStorage.setItem("cards", JSON.stringify(updatedCards));
+  }
+
+  function moveCardToHistorique(cardInfo) {
+    const historiqueCards = JSON.parse(localStorage.getItem("historiqueCards")) || [];
+    historiqueCards.push(cardInfo);
+    localStorage.setItem("historiqueCards", JSON.stringify(historiqueCards));
+
+    removeCardFromLocalStorage(cardInfo);
   }
 
   function loadCardsFromLocalStorage() {
     const container = document.getElementById("card-container");
-
     const existingCards = JSON.parse(localStorage.getItem("cards")) || [];
 
     existingCards.forEach(cardInfo => {
       generateCard(cardInfo);
+    });
+
+    const historiqueCards = JSON.parse(localStorage.getItem("historiqueCards")) || [];
+    historiqueCards.forEach(cardInfo => {
+      generateCard(cardInfo);
+      container.removeChild(document.querySelector(`.card[data-name="${cardInfo.name}"]`));
     });
   }
 
@@ -120,7 +163,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var searchTerm = document.getElementById("search-input").value.trim().toLowerCase();
     var cards = document.querySelectorAll('.card');
 
-    cards.forEach(function(card) {
+    cards.forEach(function (card) {
       var cardName = card.getAttribute('data-name').toLowerCase();
       card.style.display = searchTerm === "" || cardName.startsWith(searchTerm) ? 'block' : 'none';
     });
@@ -130,7 +173,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const nameInput = document.getElementById("new-card-name");
     const roleInput = document.getElementById("new-card-role");
     const dateInput = document.getElementById("new-card-date");
-    const voirPlusLinkInput = document.getElementById("new-card-voirPlusLink"); // Ajout de cette ligne
+    const voirPlusLinkInput = document.getElementById("new-card-voirPlusLink");
     const rendreLinkInput = document.getElementById("new-card-rendreLink");
 
     const newName = nameInput.value.trim();
@@ -145,7 +188,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     if (newName && newRole) {
-      const newCardInfo = { name: newName, role: newRole, date: newDate, voirPlusLink: newVoirPlusLink, rendreLink: newRendreLink, };
+      const newCardInfo = { name: newName, role: newRole, date: newDate, voirPlusLink: newVoirPlusLink, rendreLink: newRendreLink };
       generateCard(newCardInfo);
 
       nameInput.value = "";
@@ -156,12 +199,13 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // Charger les cartes depuis le stockage local au chargement de la page
   window.addEventListener("load", loadCardsFromLocalStorage);
 
   document.getElementById("search-input").addEventListener("input", performSearch);
   document.getElementById("add-card-btn").addEventListener("click", addNewCard);
 });
+
+
 
 
 

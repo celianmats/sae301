@@ -200,14 +200,18 @@ h2 {
   font-size: 0.8rem;
   font-weight: bold;
   cursor: pointer;
-  margin: 2em 0.3em 3em 0.3em;
   border: 0;
+  margin: 1em 0.3em 0em 0.3em;
 }
 #add-card-btn {
   padding: 1em 4em;
+  margin: 2em 0.3em 3em 0.3em;
 }
 .card div {
-  margin: 2em 0;
+  margin: 1em 0;
+  justify-content: center;
+  flex-wrap: wrap;
+  display: flex;
 }
 .card.hidden {
   display: none;
@@ -378,6 +382,9 @@ form {
     border-radius: 10px;
    text-align: center;
 }
+.historique {
+  display: block;
+}
 /*responsive*/
 
 @media(max-width: 992px) {
@@ -400,6 +407,7 @@ form {
   }
   .calendar-container {
     margin: 2em 0;
+    width: 100% !important;
   }
   .evenement {
     min-width: 100px !important;

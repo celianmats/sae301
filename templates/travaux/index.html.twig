@@ -14,7 +14,7 @@
 <header>
     <nav>
         <div class="navbar">
-            <div class="logo"><a href="{{ path('app_default') }}"><img class="logo" src="{{ asset('images/logo.png') }}"></a></div>
+            <div class="logo"><a href="{{ path('app_default') }}"><img class="logo" src="{{ asset('images/logo.png') }}" alt="logo"></a></div>
             <ul class="links">
                 <li class="li"> <a href="{{ path('app_default') }}">Accueil</a></li>
                 <li class="li"><a href="{{ path('app_calendar') }}">Calendrier</a></li>
@@ -50,156 +50,7 @@
     </div>
 </div>
 <div class="card-container" id="card-container">
-
-
-    <script>
-        (function () {
-            function generateRandomDate() {
-                var year = 2023;
-                var month = Math.floor(Math.random() * 12) + 1;
-                var day = Math.floor(Math.random() * 28) + 1;
-
-                return `${day}/${month}/${year}`;
-            }
-
-            function generateCard(cardInfo) {
-                const container = document.getElementById("card-container");
-
-                const card = document.createElement("div");
-                card.classList.add("card");
-                card.setAttribute("data-name", cardInfo.name);
-
-                const nameElement = document.createElement("h3");
-                nameElement.textContent = cardInfo.name;
-
-                const roleElement = document.createElement("p");
-                roleElement.textContent = cardInfo.role;
-
-                const renduDateElement = document.createElement("b");
-                renduDateElement.classList.add("rendu-date");
-
-                if (cardInfo.date && /^\d{1,2}\/\d{1,2}\/\d{4}$/.test(cardInfo.date)) {
-                    renduDateElement.textContent = "Rendu : " + cardInfo.date;
-                } else {
-                    renduDateElement.textContent = "Pas de date";
-                }
-
-                const checkboxElement = document.createElement("input");
-                checkboxElement.setAttribute("type", "checkbox");
-                checkboxElement.classList.add("check-input");
-
-                const imgElement = document.createElement("img");
-                imgElement.setAttribute("src", "{{ asset('images/check.png') }}");
-                imgElement.setAttribute("alt", "Check Image");
-
-                const linksContainer = document.createElement("div");
-
-                const voirPlusLink = document.createElement("a");
-                voirPlusLink.setAttribute("href", cardInfo.voirPlusLink || "#");
-                voirPlusLink.textContent = "Voir plus";
-                voirPlusLink.classList.add("voir-plus-button");
-                voirPlusLink.addEventListener("click", function () {
-                    window.location.href = voirPlusLink.getAttribute("href");
-                });
-
-                const rendreLink = document.createElement("a");
-                rendreLink.setAttribute("href", cardInfo.rendreLink || "#");
-                rendreLink.textContent = "Rendre";
-                rendreLink.classList.add("rendre-button");
-                rendreLink.addEventListener("click", function () {
-                    window.location.href = rendreLink.getAttribute("href");
-                });
-
-                linksContainer.appendChild(voirPlusLink);
-                linksContainer.appendChild(rendreLink);
-
-                card.appendChild(nameElement);
-                card.appendChild(roleElement);
-                card.appendChild(renduDateElement);
-                card.appendChild(checkboxElement);
-                card.appendChild(imgElement);
-                card.appendChild(linksContainer);
-
-                container.appendChild(card);
-
-                checkboxElement.addEventListener("change", function () {
-                    if (checkboxElement.checked) {
-
-                        checkboxElement.setAttribute("disabled", "true");
-                        card.style.display = "none";
-                    }
-                });
-            }
-
-            function generateCards() {
-                const cardData = [
-                    {
-                        name: "SAE301",
-                        role: "Développer des parcours utilisateur au sein d'un système d'information",
-                        voirPlusLink: "https://example.com/sae301-details",
-                        rendreLink: "https://example.com/sae301-submit",
-                        date: "03/12/2023"
-                    },
-                    {
-                        name: "WR304",
-                        role: "Travail dirigé sur un texte",
-                        voirPlusLink: "https://example.com/wr304-details",
-                        rendreLink: "https://example.com/wr304-submit",
-                        date: "15/12/2023"
-                    },
-                    {
-                        name: "WR308",
-                        role: "Représenter les invisibles",
-                        voirPlusLink: "https://example.com/wr308-details",
-                        rendreLink: "https://example.com/wr308-submit",
-                        date: "22/12/2023"
-                    },
-                    {
-                        name: "WR309",
-                        role: "Refonte du site web sortir dans l'aube",
-                        voirPlusLink: "https://example.com/wr309-details",
-                        rendreLink: "https://example.com/wr309-submit",
-                        date: "29/12/2023"
-                    },
-                    {
-                        name: "WR311",
-                        role: "Réalisation d'un live twitch et son stream deck sur une page html",
-                        voirPlusLink: "https://example.com/wr311-details",
-                        rendreLink: "https://example.com/wr311-submit",
-                        date: "30/12/2023"
-                    },
-                    {
-                        name: "WR317",
-                        role: "Réaliser une étude de la consommation numérique",
-                        voirPlusLink: "https://example.com/wr317-details",
-                        rendreLink: "https://example.com/wr317-submit",
-                        date: "30/12/2023"
-                    },
-                ];
-
-                cardData.forEach(generateCard);
-            }
-
-            function performSearch() {
-                var searchTerm = document.getElementById("search-input").value.trim().toLowerCase();
-                var cards = document.querySelectorAll('.card');
-
-                cards.forEach(function (card) {
-                    var cardName = card.getAttribute('data-name').toLowerCase();
-                    card.style.display = searchTerm === "" || cardName.startsWith(searchTerm) ? 'block' : 'none';
-                });
-            }
-
-            document.addEventListener("DOMContentLoaded", function () {
-                generateCards();
-                document.getElementById("search-input").addEventListener("input", performSearch);
-            });
-        })();
-
-
-
-
-    </script>
+    <script src="{{ asset('assets/js/card.js') }}"></script>
 
 </div>
     <form id="new-card-form">
@@ -223,6 +74,11 @@
         <button type="button" id="add-card-btn">Ajouter</button>
 
     </form>
+    <h1>Historique des travaux</h1>
+    <h2>Vos rendus déjà envoyés</h2>
+    <div class="card-container" id="historique-container">
+
+    </div>
 
 {% endblock %}
 {% block javascripts %}

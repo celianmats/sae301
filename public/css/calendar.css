@@ -33,6 +33,7 @@
   background: #fff;
   border-radius: 10px;
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+  width: 50%;
 }
 
 .calendar-container header {
@@ -202,28 +203,44 @@ header .calendar-current-date {
   margin-right: 6vw;
 
 }
-.calendar-dates li.highlight-red {
-  color: white;
+.calendar-dates li.active::before {
+  background: #227F83;
 }
 
-.calendar-dates li.highlight-orange {
-  color: white;
+.calendar-dates li:not(.active):hover::before {
+  background: #e4e1e1;
 }
 
-.calendar-dates li.highlight-green {
-  color: white;
+.calendar-dates li.clicked {
+  color: #fff;
+}
+
+.calendar-dates li.clicked::before {
+  background: #33bec3;
+}
+
+.calendar-dates li.clicked:hover::before {
+  background: #33bec3;
 }
 
 .calendar-dates li.highlight-red::before{
   background: red;
+  color: white;
 }
 
 .calendar-dates li.highlight-orange::before{
   background: orange;
+  color: white;
 }
 
 .calendar-dates li.highlight-green::before {
   background: green;
+  color: white;
+}
+
+.calendar-dates li.highlight-blue::before {
+  background: blue;
+  color: white;
 }
 @media(max-width: 476px) {
   header .calendar-current-date {
